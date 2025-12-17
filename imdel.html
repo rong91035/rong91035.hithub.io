@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 台灣人氣自助餐 Top 5</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #1a1a1a;
+            --light: #f4f4f4;
+        }
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        .buffet-card {
+            background: #2a2a2a;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #444;
+            display: flex;
+            flex-direction: row;
+        }
+        .buffet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
+        }
+        .image-box {
+            width: 300px;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .rank {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+        .name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .tag {
+            background: #444;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .buffet-card.active .details {
+            max-height: 200px;
+            margin-top: 15px;
+        }
+        @media (max-width: 600px) {
+            .buffet-card { flex-direction: column; }
+            .image-box { width: 100%; height: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✨ 2025 台灣五大人氣自助餐排行榜 ✨</h1>
+    <p style="text-align: center; color: #aaa;">點擊各餐廳查看詳情</p>
+
+    <div class="container" id="app">
+        </div>
+
+    <script>
+        const buffets = [
+            {
+                rank: "TOP 1",
+                name: "饗 A Joy",
+                tags: ["全台最高", "極致奢華"],
+                img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80",
+                desc: "座落於台北101第86層。2025年依舊是全台最頂級指標，提供龍蝦、和牛、帝王蟹等高端食材。不僅是味蕾饗宴，更能俯瞰台北夜景，訂位難度依然是地獄級。"
+            },
+            {
+                rank: "TOP 2",
+                name: "島語自助餐廳 (ISLAND)",
+                tags: ["南港首選", "餐酒搭"],
+                img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80",
+                desc: "漢來集團旗艦品牌，主打「一島台一餐酒」，八大餐區皆配有專屬餐酒或飲料，成功在精緻度與多樣性間取得平衡，是2025年網路熱度極高的黑馬。"
+            },
+            {
+                rank: "TOP 3",
+                name: "旭集 和食集錦",
+                tags: ["日料天花板", "海鮮"],
+                img: "https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&w=800&q=80",
+                desc: "專注於日式高端料理，從炙燒握壽司到頂級鐵板燒，食材新鮮度極高。其優雅的日式美學與獨有的和菓子甜點區，深受女性與商務客喜愛。"
+            },
+            {
+                rank: "TOP 4",
+                name: "饗饗 INPARADISE",
+                tags: ["景觀餐廳", "高CP值奢華"],
+                img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+                desc: "雖然已有多年口碑，但憑藉微風信義的高樓美景與穩定且多樣化的異國料理，2025年依舊是慶生、約會的首選。其「海味」區的生食與熟食海鮮始終維持高水準。"
+            },
+            {
+                rank: "TOP 5",
+                name: "晶華酒店 栢麗廳 (Brasserie)",
+                tags: ["五星經典", "海鮮大船"],
+                img: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80",
+                desc: "台北五星級飯店自助餐的長青樹。2025年透過不斷的客座大師週與期間限定食材保持新鮮感。那艘滿載當季鮮魚的海鮮大船，依然是食客必朝聖的壯觀景色。"
+            }
+        ];
+
+        const container = document.getElementById('app');
+
+        buffets.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'buffet-card';
+            card.innerHTML = `
+                <div class="image-box" style="background-image: url('${item.img}')"></div>
+                <div class="content">
+                    <div class="rank">${item.rank}</div>
+                    <div class="name">${item.name}</div>
+                    <div class="tags">
+                        ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="details">${item.desc}</div>
+                </div>
+            `;
+            card.addEventListener('click', () => {
+                card.classList.toggle('active');
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>
